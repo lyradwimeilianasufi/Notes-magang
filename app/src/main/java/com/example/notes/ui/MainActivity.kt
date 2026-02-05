@@ -1,4 +1,4 @@
-package com.example.notes
+package com.example.notes.ui
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,7 +9,9 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.notes.R
 import com.example.notes.data.Note
+import com.example.notes.viewmodel.NoteViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
