@@ -32,6 +32,15 @@
         android:inputType="textMultiLine"
         android:layout_marginTop="8dp" />
 
+    <ImageButton
+        android:id="@+id/btnFavorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/btn_star_big_off"
+        android:contentDescription="Favorite"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp" />
+
     <Button
         android:id="@+id/btnSave"
         android:layout_width="match_parent"

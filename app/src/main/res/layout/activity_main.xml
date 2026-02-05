@@ -8,7 +8,7 @@
 
     <!-- Judul -->
     <TextView
-        android:id="@+id/tvTitle"
+        android:id="@+id/tvAppName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="📒 Catatan Aku"
@@ -21,7 +21,7 @@
         android:id="@+id/searchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tvTitle"
+        android:layout_below="@id/tvAppName"
         android:layout_marginHorizontal="16dp"
         android:queryHint="Cari catatan kamu..."
         android:iconifiedByDefault="false" />

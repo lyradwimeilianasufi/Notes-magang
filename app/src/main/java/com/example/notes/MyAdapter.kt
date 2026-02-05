@@ -17,16 +17,24 @@ class MyAdapter(private val context: Context, private val values: MutableList<No
 
         val titleTextView = rowView.findViewById<TextView>(R.id.tvTitle)
         val contentTextView = rowView.findViewById<TextView>(R.id.tvContent)
+        val favoriteTextView = rowView.findViewById<TextView>(R.id.tvFavorite)
 
         val note = values[position]
         titleTextView.text = note.title
         contentTextView.text = note.content
+        
+        if (note.isFavorite) {
+            favoriteTextView.visibility = View.VISIBLE
+        } else {
+            favoriteTextView.visibility = View.GONE
+        }
 
         rowView.setOnClickListener {
             val intent = Intent(context, DetailActivity::class.java)
             intent.putExtra("NOTE_ID", note.id)
             intent.putExtra("NOTE_TITLE", note.title)
             intent.putExtra("NOTE_CONTENT", note.content)
+            intent.putExtra("NOTE_FAVORITE", note.isFavorite)
             context.startActivity(intent)
         }
 

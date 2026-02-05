@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +13,7 @@ import androidx.core.view.WindowInsetsCompat
 
 class AddNoteActivity : AppCompatActivity() {
     private var noteId: Int = -1
+    private var isFavorite: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,9 +27,10 @@ class AddNoteActivity : AppCompatActivity() {
             insets
         }
 
-        val tvHeader = findViewById<TextView>(R.id.textView) // The "✍️ Tulis Catatan" TextView doesn't have an ID in XML, I should add one or find it by position. Wait, I'll just check if it exists.
+        val tvHeader = findViewById<TextView>(R.id.textView)
         val etTitle = findViewById<EditText>(R.id.etTitle)
         val etContent = findViewById<EditText>(R.id.etContent)
+        val btnFavorite = findViewById<ImageButton>(R.id.btnFavorite)
         val buttonSave = findViewById<Button>(R.id.btnSave)
 
         // Check if we are editing an existing note
@@ -35,7 +38,15 @@ class AddNoteActivity : AppCompatActivity() {
             noteId = intent.getIntExtra("NOTE_ID", -1)
             etTitle.setText(intent.getStringExtra("NOTE_TITLE"))
             etContent.setText(intent.getStringExtra("NOTE_CONTENT"))
+            isFavorite = intent.getBooleanExtra("NOTE_FAVORITE", false)
             buttonSave.text = "Update Catatan"
+            
+            updateFavoriteIcon(btnFavorite)
+        }
+
+        btnFavorite.setOnClickListener {
+            isFavorite = !isFavorite
+            updateFavoriteIcon(btnFavorite)
         }
 
         buttonSave.setOnClickListener {
@@ -47,9 +58,18 @@ class AddNoteActivity : AppCompatActivity() {
                 resultIntent.putExtra("NOTE_ID", noteId)
                 resultIntent.putExtra("NOTE_TITLE", title)
                 resultIntent.putExtra("NOTE_CONTENT", content)
+                resultIntent.putExtra("NOTE_FAVORITE", isFavorite)
                 setResult(RESULT_OK, resultIntent)
                 finish()
             }
+        }
+    }
+
+    private fun updateFavoriteIcon(btnFavorite: ImageButton) {
+        if (isFavorite) {
+            btnFavorite.setImageResource(android.R.drawable.btn_star_big_on)
+        } else {
+            btnFavorite.setImageResource(android.R.drawable.btn_star_big_off)
         }
     }
 }
