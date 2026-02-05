@@ -1,44 +1,43 @@
 package com.example.notes.ui
 
-import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.example.notes.R
 import com.example.notes.data.Note
 
-class MyAdapter(private val context: Context, private val values: MutableList<Note>) :
-    ArrayAdapter<Note>(context, R.layout.list_item, values) {
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val rowView: View = inflater.inflate(R.layout.list_item, parent, false)
+class MyAdapter(
+    private var notes: List<Note>,
+    private val onItemClick: (Note) -> Unit
+) : RecyclerView.Adapter<MyAdapter.NoteViewHolder>() {
 
-        val titleTextView = rowView.findViewById<TextView>(R.id.tvTitle)
-        val contentTextView = rowView.findViewById<TextView>(R.id.tvContent)
-        val favoriteTextView = rowView.findViewById<TextView>(R.id.tvFavorite)
+    class NoteViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val titleTextView: TextView = view.findViewById(R.id.tvTitle)
+        val contentTextView: TextView = view.findViewById(R.id.tvContent)
+        val favoriteTextView: TextView = view.findViewById(R.id.tvFavorite)
+        val emojiBg: View = view.findViewById(R.id.emojiContainer) // Perlu update di list_item.xml
+    }
 
-        val note = values[position]
-        titleTextView.text = note.title
-        contentTextView.text = note.content
-        
-        if (note.isFavorite) {
-            favoriteTextView.visibility = View.VISIBLE
-        } else {
-            favoriteTextView.visibility = View.GONE
-        }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false)
+        return NoteViewHolder(view)
+    }
 
-        rowView.setOnClickListener {
-            val intent = Intent(context, DetailActivity::class.java)
-            intent.putExtra("NOTE_ID", note.id)
-            intent.putExtra("NOTE_TITLE", note.title)
-            intent.putExtra("NOTE_CONTENT", note.content)
-            intent.putExtra("NOTE_FAVORITE", note.isFavorite)
-            context.startActivity(intent)
-        }
+    override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
+        val note = notes[position]
+        holder.titleTextView.text = note.title
+        holder.contentTextView.text = note.content
+        holder.favoriteTextView.visibility = if (note.isFavorite) View.VISIBLE else View.GONE
 
-        return rowView
+        holder.itemView.setOnClickListener { onItemClick(note) }
+    }
+
+    override fun getItemCount() = notes.size
+
+    fun updateData(newNotes: List<Note>) {
+        this.notes = newNotes
+        notifyDataSetChanged()
     }
 }

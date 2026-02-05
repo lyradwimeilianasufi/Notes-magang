@@ -2,24 +2,30 @@ package com.example.notes.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.ListView
+import android.view.View
+import android.widget.LinearLayout
 import android.widget.SearchView
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.notes.R
 import com.example.notes.data.Note
 import com.example.notes.viewmodel.NoteViewModel
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 
 
 class MainActivity : AppCompatActivity() {
-    private var adapter: MyAdapter? = null
+    private lateinit var adapter: MyAdapter
     private val viewModel: NoteViewModel by viewModels()
-    private var allNotesList = mutableListOf<Note>()
+    private var allNotesList = listOf<Note>()
     private var displayedItems = mutableListOf<Note>()
+    
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var emptyState: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,12 +38,22 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val listView = findViewById<ListView>(R.id.listView)
-        val addNoteButton = findViewById<FloatingActionButton>(R.id.fabAdd)
+        recyclerView = findViewById(R.id.recyclerView)
+        emptyState = findViewById(R.id.emptyState)
+        val addNoteButton = findViewById<ExtendedFloatingActionButton>(R.id.fabAdd)
         val searchView = findViewById<SearchView>(R.id.searchView)
 
-        adapter = MyAdapter(this, displayedItems)
-        listView.adapter = adapter
+        // Setup RecyclerView
+        adapter = MyAdapter(displayedItems) { note ->
+            val intent = Intent(this, DetailActivity::class.java)
+            intent.putExtra("NOTE_ID", note.id)
+            intent.putExtra("NOTE_TITLE", note.title)
+            intent.putExtra("NOTE_CONTENT", note.content)
+            intent.putExtra("NOTE_FAVORITE", note.isFavorite)
+            startActivity(intent)
+        }
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = adapter
 
         addNoteButton.setOnClickListener {
             val intent = Intent(this, AddNoteActivity::class.java)
@@ -57,29 +73,43 @@ class MainActivity : AppCompatActivity() {
 
         // MVVM: Observasi data dari ViewModel
         viewModel.allNotes.observe(this) { notes ->
-            allNotesList.clear()
-            allNotesList.addAll(notes)
+            allNotesList = notes
             filterNotes(searchView.query.toString())
         }
+        
+        // Animasi Extended FAB saat scroll
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (dy > 0) addNoteButton.shrink()
+                else if (dy < 0) addNoteButton.extend()
+            }
+        })
     }
 
     private fun filterNotes(query: String?) {
-        displayedItems.clear()
-        if (query.isNullOrEmpty()) {
-            displayedItems.addAll(allNotesList)
+        val filteredList = if (query.isNullOrEmpty()) {
+            allNotesList
         } else {
             val lowerCaseQuery = query.lowercase()
-            for (note in allNotesList) {
-                if (note.title.lowercase().contains(lowerCaseQuery) ||
-                    note.content.lowercase().contains(lowerCaseQuery)
-                ) {
-                    displayedItems.add(note)
-                }
+            allNotesList.filter { 
+                it.title.lowercase().contains(lowerCaseQuery) || 
+                it.content.lowercase().contains(lowerCaseQuery) 
             }
         }
-        adapter?.notifyDataSetChanged()
+        
+        displayedItems.clear()
+        displayedItems.addAll(filteredList)
+        adapter.updateData(displayedItems)
+        
+        // Update Empty State visibility
+        if (displayedItems.isEmpty()) {
+            emptyState.visibility = View.VISIBLE
+            recyclerView.visibility = View.GONE
+        } else {
+            emptyState.visibility = View.GONE
+            recyclerView.visibility = View.VISIBLE
+        }
     }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -90,7 +120,7 @@ class MainActivity : AppCompatActivity() {
             val isFavorite = data?.getBooleanExtra("NOTE_FAVORITE", false) ?: false
             
             val newNote = Note(title = title, content = content, isFavorite = isFavorite)
-            viewModel.insert(newNote) // MVVM: Simpan lewat ViewModel
+            viewModel.insert(newNote)
         }
     }
 

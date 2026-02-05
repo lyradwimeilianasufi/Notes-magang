@@ -18,6 +18,7 @@
 
         <!-- Emoji Container -->
         <FrameLayout
+            android:id="@+id/emojiContainer"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@drawable/bg_emoji_circle"
