@@ -2,4 +2,11 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Custom Palette -->
+    <color name="orange_primary">#F4A261</color>
+    <color name="red_brick_secondary">#E76F51</color>
+    <color name="cream_background">#FFF7ED</color>
+    <color name="dark_blue_text">#264653</color>
+    <color name="green_tosca_text">#2A9D8F</color>
 </resources>

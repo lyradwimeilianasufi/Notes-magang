@@ -1,8 +1,22 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.Notes" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <style name="Base.Theme.Notes" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/orange_primary</item>
+        <item name="colorPrimaryVariant">@color/red_brick_secondary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/green_tosca_text</item>
+        <item name="colorSecondaryVariant">@color/green_tosca_text</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@color/cream_background</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <!-- Background color. -->
+        <item name="android:windowBackground">@color/cream_background</item>
+        <!-- Text colors. -->
+        <item name="android:textColorPrimary">@color/dark_blue_text</item>
+        <item name="android:textColorSecondary">@color/green_tosca_text</item>
     </style>
 
     <style name="Theme.Notes" parent="Base.Theme.Notes" />

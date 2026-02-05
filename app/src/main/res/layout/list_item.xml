@@ -1,28 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
-    android:radius="18dp"
-    android:elevation="4dp"
-    android:backgroundTint="#FFF7ED">
+    android:layout_marginHorizontal="12dp"
+    android:layout_marginVertical="6dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="3dp"
+    app:cardBackgroundColor="@color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="14dp"
-        android:gravity="center_vertical"
-        android:background="#FFF7ED">
+        android:padding="16dp"
+        android:gravity="center_vertical">
 
-        <!-- Emoji -->
-        <TextView
-            android:id="@+id/tvEmoji"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="📝"
-            android:textSize="26sp"
-            android:layout_marginEnd="12dp" />
+        <!-- Emoji Container -->
+        <FrameLayout
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_emoji_circle"
+            android:layout_marginEnd="16dp">
+
+            <TextView
+                android:id="@+id/tvEmoji"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="📝"
+                android:textSize="22sp" />
+        </FrameLayout>
 
         <!-- Text -->
         <LinearLayout
@@ -36,23 +44,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Judul Catatan"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="#333333" />
+                android:textColor="@color/dark_blue_text" />
 
             <TextView
                 android:id="@+id/tvContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Isi catatan singkat yang lucu ✨"
-                android:maxLines="2"
+                android:maxLines="1"
                 android:ellipsize="end"
                 android:textSize="14sp"
-                android:textColor="#555555"
-                android:layout_marginTop="4dp" />
+                android:textColor="@color/green_tosca_text"
+                android:layout_marginTop="2dp" />
         </LinearLayout>
 
-        <!-- Aksen -->
+        <!-- Favorite Icon -->
         <TextView
             android:id="@+id/tvFavorite"
             android:layout_width="wrap_content"

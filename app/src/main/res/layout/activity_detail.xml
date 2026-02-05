@@ -3,18 +3,19 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFF7ED">
+    android:background="@color/cream_background">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="20dp">
 
-        <!-- Judul -->
+        <!-- Header: Judul dan Favorite -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <TextView
@@ -23,16 +24,18 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="📒 Judul Catatan"
-                android:textSize="22sp"
+                android:textSize="26sp"
                 android:textStyle="bold"
-                android:textColor="#333333" />
+                android:textColor="@color/dark_blue_text" />
 
             <ImageButton
                 android:id="@+id/btnDetailFavorite"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@android:drawable/btn_star_big_off"
-                android:contentDescription="Favorite" />
+                android:contentDescription="Favorite"
+                android:scaleType="centerInside" />
         </LinearLayout>
 
         <!-- Tanggal -->
@@ -41,26 +44,38 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="🗓 29 Jan 2026"
-            android:textSize="12sp"
-            android:layout_marginTop="4dp"
-            android:textColor="#666666" />
+            android:textSize="13sp"
+            android:layout_marginTop="6dp"
+            android:textColor="@color/green_tosca_text"
+            android:alpha="0.8" />
 
-        <!-- Isi -->
-        <TextView
-            android:id="@+id/tvDetailContent"
+        <!-- Card for Content -->
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Isi catatan lengkap ditampilkan di sini dengan gaya lucu dan nyaman dibaca 💖"
-            android:textSize="16sp"
-            android:layout_marginTop="16dp"
-            android:textColor="#333333" />
+            android:layout_marginTop="24dp"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="@color/white">
+
+            <TextView
+                android:id="@+id/tvDetailContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="Isi catatan lengkap ditampilkan di sini dengan gaya lucu dan nyaman dibaca 💖"
+                android:textSize="17sp"
+                android:lineSpacingExtra="4dp"
+                android:textColor="@color/dark_blue_text" />
+        </androidx.cardview.widget.CardView>
 
         <!-- Tombol Aksi -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="24dp">
+            android:layout_marginTop="32dp">
 
             <Button
                 android:id="@+id/btnEdit"
@@ -68,8 +83,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="✏️ Edit"
-                android:backgroundTint="#FFB703"
-                android:textColor="#FFFFFF" />
+                android:padding="12dp"
+                android:textAllCaps="false"
+                android:backgroundTint="@color/orange_primary"
+                android:textColor="@color/white" />
 
             <Button
                 android:id="@+id/btnDelete"
@@ -77,9 +94,11 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="🗑 Hapus"
-                android:backgroundTint="#E76F51"
-                android:textColor="#FFFFFF"
-                android:layout_marginStart="8dp" />
+                android:padding="12dp"
+                android:textAllCaps="false"
+                android:backgroundTint="@color/red_brick_secondary"
+                android:textColor="@color/white"
+                android:layout_marginStart="12dp" />
         </LinearLayout>
 
     </LinearLayout>
