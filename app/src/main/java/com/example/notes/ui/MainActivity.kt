@@ -3,6 +3,7 @@ package com.example.notes.ui
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.SearchView
 import androidx.activity.enableEdgeToEdge
@@ -25,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     private var displayedItems = mutableListOf<Note>()
     
     private lateinit var recyclerView: RecyclerView
-    private lateinit var emptyState: LinearLayout
+    private lateinit var emptyState: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +43,13 @@ class MainActivity : AppCompatActivity() {
         emptyState = findViewById(R.id.emptyState)
         val addNoteButton = findViewById<ExtendedFloatingActionButton>(R.id.fabAdd)
         val searchView = findViewById<SearchView>(R.id.searchView)
+        
+        // Setup Button dari Empty State
+        val btnAddFromEmpty = emptyState.findViewById<Button>(R.id.btnAddFromEmptyState)
+        btnAddFromEmpty.setOnClickListener {
+            val intent = Intent(this, AddNoteActivity::class.java)
+            startActivityForResult(intent, REQUEST_CODE_ADD_NOTE)
+        }
 
         // Setup RecyclerView
         adapter = MyAdapter(displayedItems) { note ->

@@ -64,37 +64,10 @@
         tools:listitem="@layout/list_item" />
 
     <!-- Empty State -->
-    <LinearLayout
+    <include
         android:id="@+id/emptyState"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="✨"
-            android:textSize="64sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Belum ada catatan nih..."
-            android:textColor="@color/dark_blue_text"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Yuk, tulis cerita harimu!"
-            android:textColor="@color/green_tosca_text"
-            android:textSize="14sp" />
-    </LinearLayout>
+        layout="@layout/empty_state"
+        android:visibility="gone" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/fabAdd"

@@ -1,22 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
     android:gravity="center"
-    android:orientation="vertical"
-    android:background="#FFF7ED">
+    android:orientation="vertical">
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="🐣"
-        android:textSize="64sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:textSize="64sp" />
 
     <TextView
-        android:text="Belum ada catatan~"
-        android:textSize="16sp"
-        android:layout_marginTop="8dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Belum ada catatan nih~"
+        android:textColor="@color/dark_blue_text"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Yuk, tulis cerita ceriamu hari ini!"
+        android:textColor="@color/green_tosca_text"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/btnAddFromEmptyState"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Buat Catatan Pertama!"
+        android:textColor="@color/orange_primary"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
 </LinearLayout>
