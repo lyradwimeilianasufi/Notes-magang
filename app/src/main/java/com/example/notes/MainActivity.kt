@@ -7,12 +7,17 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
+import com.example.notes.data.Note
+import com.example.notes.data.NoteDatabase
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity() {
     private var adapter: MyAdapter? = null
-    private lateinit var items: ArrayList<String>
+    private var items = mutableListOf<Note>()
+    private lateinit var database: NoteDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,43 +30,45 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        database = NoteDatabase.getDatabase(this)
         val listView = findViewById<ListView>(R.id.listView)
         val addNoteButton = findViewById<FloatingActionButton>(R.id.fabAdd)
 
-
-        // Initialize the list of items
-        items = ArrayList()
-
-
-        // Add a temporary item
-        items.add("Temp Add Element")
-
-
-        // Create the adapter and set it to the ListView
         adapter = MyAdapter(this, items)
         listView.adapter = adapter
 
-
-        // Set click listener for the add note button
         addNoteButton.setOnClickListener {
-            val intent = Intent(
-                this@MainActivity,
-                AddNoteActivity::class.java
-            )
+            val intent = Intent(this, AddNoteActivity::class.java)
             startActivityForResult(intent, REQUEST_CODE_ADD_NOTE)
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        loadNotes()
+    }
 
-    @Deprecated("This method has been deprecated in favor of using the Activity Result API\n      which brings increased type safety via an {@link ActivityResultContract} and the prebuilt\n      contracts for common intents available in\n      {@link androidx.activity.result.contract.ActivityResultContracts}, provides hooks for\n      testing, and allow receiving results in separate, testable classes independent from your\n      activity. Use\n      {@link #registerForActivityResult(ActivityResultContract, ActivityResultCallback)}\n      with the appropriate {@link ActivityResultContract} and handling the result in the\n      {@link ActivityResultCallback#onActivityResult(Object) callback}.")
+    private fun loadNotes() {
+        lifecycleScope.launch {
+            val notes = database.noteDao().getAllNotes()
+            items.clear()
+            items.addAll(notes)
+            adapter?.notifyDataSetChanged()
+        }
+    }
+
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == REQUEST_CODE_ADD_NOTE && resultCode == RESULT_OK) {
-            val newNote = data?.getStringExtra("NEW_NOTE")
-            if (newNote != null) {
-                items.add(newNote)
-                adapter!!.notifyDataSetChanged()
+            val title = data?.getStringExtra("NOTE_TITLE") ?: ""
+            val content = data?.getStringExtra("NOTE_CONTENT") ?: ""
+            
+            lifecycleScope.launch {
+                val newNote = Note(title = title, content = content)
+                database.noteDao().insert(newNote)
+                loadNotes()
             }
         }
     }
