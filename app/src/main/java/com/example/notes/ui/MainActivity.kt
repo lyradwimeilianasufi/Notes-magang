@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("NOTE_TITLE", note.title)
             intent.putExtra("NOTE_CONTENT", note.content)
             intent.putExtra("NOTE_FAVORITE", note.isFavorite)
+            intent.putExtra("NOTE_TIMESTAMP", note.timestamp)
             startActivity(intent)
         }
         recyclerView.layoutManager = LinearLayoutManager(this)
