@@ -46,7 +46,7 @@
                     android:background="@android:color/transparent"
                     android:iconifiedByDefault="false"
                     android:padding="4dp"
-                    android:queryHint="Cari catatan mu..."
+                    android:queryHint="Cari"
                     android:searchIcon="@android:drawable/ic_menu_search" />
             </androidx.cardview.widget.CardView>
         </LinearLayout>
