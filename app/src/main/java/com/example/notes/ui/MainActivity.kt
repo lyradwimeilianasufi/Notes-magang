@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.notes.R
 import com.example.notes.data.Note
+import com.example.notes.databinding.ActivityMainBinding
 import com.example.notes.viewmodel.NoteViewModel
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 
@@ -22,14 +23,14 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: NoteViewModel by viewModels()
     private var allNotesList = listOf<Note>()
     private var displayedItems = mutableListOf<Note>()
-    
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var emptyState: View
+    private lateinit var binding: ActivityMainBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -37,8 +38,6 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        recyclerView = findViewById(R.id.recyclerView)
-        emptyState = findViewById(R.id.emptyState)
         val addNoteButton = findViewById<ExtendedFloatingActionButton>(R.id.fabAdd)
         val searchView = findViewById<SearchView>(R.id.searchView)
 
@@ -52,11 +51,14 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("NOTE_TIMESTAMP", note.timestamp)
             startActivity(intent)
         }
-        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        binding.apply {
+
+        recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
         recyclerView.adapter = adapter
 
         addNoteButton.setOnClickListener {
-            val intent = Intent(this, AddNoteActivity::class.java)
+            val intent = Intent(this@MainActivity, AddNoteActivity::class.java)
             startActivityForResult(intent, REQUEST_CODE_ADD_NOTE)
         }
 
@@ -72,11 +74,11 @@ class MainActivity : AppCompatActivity() {
         })
 
         // MVVM: Observasi data dari ViewModel
-        viewModel.allNotes.observe(this) { notes ->
+        viewModel.allNotes.observe(this@MainActivity) { notes ->
             allNotesList = notes
             filterNotes(searchView.query.toString())
         }
-        
+
         // Animasi Extended FAB saat scroll
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -84,30 +86,33 @@ class MainActivity : AppCompatActivity() {
                 else if (dy < 0) addNoteButton.extend()
             }
         })
+        }
+
     }
+
 
     private fun filterNotes(query: String?) {
         val filteredList = if (query.isNullOrEmpty()) {
             allNotesList
         } else {
             val lowerCaseQuery = query.lowercase()
-            allNotesList.filter { 
-                it.title.lowercase().contains(lowerCaseQuery) || 
-                it.content.lowercase().contains(lowerCaseQuery) 
+            allNotesList.filter {
+                it.title.lowercase().contains(lowerCaseQuery) ||
+                        it.content.lowercase().contains(lowerCaseQuery)
             }
         }
-        
+
         displayedItems.clear()
         displayedItems.addAll(filteredList)
         adapter.updateData(displayedItems)
-        
+
         // Update Empty State visibility
         if (displayedItems.isEmpty()) {
-            emptyState.visibility = View.VISIBLE
-            recyclerView.visibility = View.GONE
+            binding.emptyState.root.visibility = View.VISIBLE
+            binding.recyclerView.visibility = View.GONE
         } else {
-            emptyState.visibility = View.GONE
-            recyclerView.visibility = View.VISIBLE
+            binding.emptyState.root.visibility = View.GONE
+            binding.recyclerView.visibility = View.VISIBLE
         }
     }
 
@@ -118,7 +123,7 @@ class MainActivity : AppCompatActivity() {
             val title = data?.getStringExtra("NOTE_TITLE") ?: ""
             val content = data?.getStringExtra("NOTE_CONTENT") ?: ""
             val isFavorite = data?.getBooleanExtra("NOTE_FAVORITE", false) ?: false
-            
+
             val newNote = Note(title = title, content = content, isFavorite = isFavorite)
             viewModel.insert(newNote)
         }
